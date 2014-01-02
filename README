@@ -1,0 +1,105 @@
+What is this?
+-------------
+
+This manifest is a 'repo' manifest [1] that manages the trees for the hisilicon
+OpenEmbedded project. Any OpenEmbedded based distribution ends up as a
+large collection of git trees (oe-core, bitbake, meta-oe, meta-hisilicon, ...),
+and 'repo' is used as a tool to manage this collection.
+
+At any given time, there can be several supported branches in the manifest,
+and the general rule is that the branch name should clearly indicate which
+OpenEmbedded/Yocto version is being used. For example, the 'master' branch
+will track the development version of OpenEmbedded.
+
+[1] http://code.google.com/p/git-repo/
+
+
+Instructions:
+-------------
+
+ 1- Install 'repo'
+
+The first thing to do before in order to use this manifest, is to install
+the 'repo' tool wrapper, and that needs to be done on each machine (or user).
+
+The following instructions can be used:
+
+$ curl https://dl-ssl.google.com/dl/googlesource/git-repo/repo > /tmp/repo
+$ chmod a+x /tmp/repo
+$ sudo mv /tmp/repo /usr/local/bin/
+
+Alternatively, if you don't have 'administrative' permission, or prefer to
+install in a user $HOME folder, you can do something along these lines:
+
+$ mkdir ~/bin
+$ curl https://dl-ssl.google.com/dl/googlesource/git-repo/repo > ~/bin/repo
+$ chmod a+x ~/bin/repo
+$ export PATH=~/bin:$PATH
+
+Do not forget to add ~/bin permanently to your PATH.
+
+ 2- Fetch all git trees
+
+To initialize your local working repository:
+
+$ repo init -u https://github.com/hisilicon/hisi-manifests.git -b daisy
+
+and to fetch and checkout all project trees:
+
+$ repo sync
+
+ 3- Initialize OpenEmbedded build folder, and create configuration files
+
+$ source meta-hisilicon/setup-environment <BUILDDIR>
+
+If <BUILDDIR> is not specified, the default name will be 'build-<MACHINE>'.
+If <build> folder does not exist, it will be created and configuration
+files will be created, using template files from meta-hisilicon/conf/, if the
+<build> folder and the configuration files already exist, the environment
+will be initialized and all existing configuration files are preserved.
+
+The configuration files can be inspected and tweaked if needed.
+
+ 4- Tips and tricks
+
+It is important to dimension the following variables from local.conf, based
+on your host configuration:
+ BB_NUMBER_THREADS = "6"
+ PARALLEL_MAKE = "-j 6"
+
+During the build, all sources archives fetched will be stored in
+<build>/downloads. It might be wise to have a 'unique' 'download' folder
+for all your build on your local machine to avoid downloading multiple times,
+and wasting disk space. The location of the 'download' is dictacted by the value
+of a bitbake variable:
+ DL_DIR ?= "${TOPDIR}/downloads"
+
+which can be set in local.conf.
+
+Alternatively, you can leave the value unchanged, and create a symlink
+
+$ cd <build folder>
+$ mkdir ../downloads
+$ ln -s ../downloads
+
+Similarly, during the build OpenEmbedded will construct the 'shared state cache'
+that is used as a local cache to speed up rebuild of components when no
+parameters have changed. It might be interesting to share this folder across
+multiple builds too. This folder location is controlled by this variable:
+
+ SSTATE_DIR ?= "${TOPDIR}/sstate-cache"
+
+And it is possible to create a symlink too:
+
+$ cd <build folder>
+$ mkdir ../sstate-cache
+$ ln -s ../sstate-cache
+
+ 5- Start the build
+
+Everything should be in place to start a build:
+
+ $ bitbake hisdk-qt5-image
+
+At the end of the build the image should be available in
+<build>/tmp/deploy/images.

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+
+  <remote  name="linaro"
+           fetch="git://git.linaro.org" />
+
+  <remote  name="oe"
+           fetch="git://git.openembedded.org" />
+
+  <remote  name="github"
+           fetch="https://github.com" />
+
+  <default remote="oe" revision="daisy" sync-j="2" />
+
+  <project name="openembedded-core" />
+  <project name="meta-openembedded" />
+  <project path="openembedded-core/bitbake" name="bitbake" revision="1.22" />
+  <project path="meta-linaro" name="openembedded/meta-linaro" remote="linaro" />
+  <project path="meta-qt5" name="meta-qt5/meta-qt5" remote="github" />
+
+  <project path="meta-hisilicon" name="hisilicon/meta-hisilicon" remote="github" />
+
+</manifest>
