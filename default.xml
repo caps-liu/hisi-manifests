@@ -8,7 +8,7 @@
            fetch="git://git.openembedded.org" />
 
   <remote  name="github"
-           fetch="git://github.com" />
+           fetch="https://github.com" />
 
   <default remote="oe" revision="dylan" sync-j="2" />
 
