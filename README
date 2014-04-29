@@ -50,15 +50,13 @@ $ repo sync
 
  3- Initialize OpenEmbedded build folder, and create configuration files
 
-$ MACHINE=<MACHINE> source meta-hisilicon/setup-environment <BUILDDIR>
+$ source meta-hisilicon/setup-environment <BUILDDIR>
 
 If <BUILDDIR> is not specified, the default name will be 'build-<MACHINE>'.
 If <build> folder does not exist, it will be created and configuration
 files will be created, using template files from meta-hisilicon/conf/, if the
 <build> folder and the configuration files already exist, the environment
 will be initialized and all existing configuration files are preserved.
-
-If <MACHINE> is not specified, it will default to <qemuarm>.
 
 The configuration files can be inspected and tweaked if needed.
 
@@ -101,7 +99,7 @@ $ ln -s ../sstate-cache
 
 Everything should be in place to start a build:
 
- $ bitbake hisi-core-image
+ $ bitbake hisdk-qt5-image
 
 At the end of the build the image should be available in
 <build>/tmp/deploy/images.
